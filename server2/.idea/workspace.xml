@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f29da32c-d133-4c15-8045-7457de7de684" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../server1/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server1/templates/upload_response.html" beforeDir="false" afterPath="$PROJECT_DIR$/../server1/templates/upload_response.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -83,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1585749348156</updated>
-      <workItem from="1585749349462" duration="13268000" />
+      <workItem from="1585749349462" duration="13683000" />
     </task>
     <servers />
   </component>
