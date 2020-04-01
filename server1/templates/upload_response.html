@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <title>File Compressor</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/css/uikit.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <script>
+        window.onload = function() {
+            var filename='{{ filename }}';
+            var downloadUrl = '{{ download_url }}'
+            var subscriptionDestination = '{{ subscription_topic }}';
+            var websocketURL = '{{ websocket_url }}';
+            var login = '{{ rabbitmq_login }}';
+            var passCode = '{{ rabbitmq_passcode }}';
+            var host = '{{ rabbitmq_host }}';
+
+            var ws = new SockJS(websocketURL);
+            var client = Stomp.over(ws);
+
+            var hasReachedOneHundredPercent = false;
+
+            function onReceive(message) {
+                var body = message.body;
+                message.ack();
+                document.getElementById('progress').innerText = body;
+                if (body.indexOf('100.0%') !== -1) {
+                    document.getElementById('indicator').style.display = 'none';
+                    document.getElementById('progress').innerText = 'Done!';
+                    hasReachedOneHundredPercent = true;
+                    console.log('100% done!');
+                } else if (hasReachedOneHundredPercent && body.indexOf('.gz') !== -1) {
+                    document.getElementById('progress').style.display = 'none';
+
+                    var aHrefDom = document.createElement('a');
+                    aHrefDom.href = downloadUrl + '/' + body;
+                    aHrefDom.className = 'uk-button uk-button-primary';
+                    aHrefDom.innerText = 'Click here to download compressed version of your file!';
+                    document.getElementById('download-button').append(
+                        aHrefDom
+                    );
+                    client.disconnect();
+                }
+            }
+
+            function onConnect() {
+                client.subscribe(subscriptionDestination, onReceive, {'ack': 'client'})
+            }
+
+            function onError(error) {
+                console.log("Error happens just like sh*t in life happens... Here's the error: ");
+                console.log(error);
+                document.getElementById('error').innerText = error.headers.message;
+            }
+
+            client.connect(login, passCode, onConnect, onError, host);
+            console.log('Finish initializing WebSocket to Compressor Server!');
+        }
+        </script>
+
+        <style>
+            body {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+            }
+
+            #success {
+                padding: 1rem;
+            }
+
+            #indicator {
+                padding: 1rem;
+            }
+
+            #progress {
+                margin-top: 2rem;
+            }
+
+            #download-button {
+                margin-top: 2rem;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h4 id="success" class="uk-text-success uk-text-bold uk-text-large">Upload success!</h4>
+        <div class="uk-text-large uk-text-muted">Server generated your unique filename:<br></div>
+        <div class="uk-text uk-text-emphasis uk-text-small">{{ filename }}!</div>
+
+        <h4 id="indicator">Compressing your file...</h4>
+
+        <div id="progress">Progress: 0%</div>
+        <div id="download-button"></div>
+        <h4 id="error" class="uk-label uk-label-error"></h4>
+    </body>
+</html>
