@@ -43,7 +43,7 @@
             }
 
             function onConnect() {
-                client.subscribe(subscriptionDestination, onReceive, {'ack': 'client'})
+                client.subscribe(subscriptionDestination, onReceive, {'ack': 'client'});
             }
 
             function onError(error) {
